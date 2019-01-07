@@ -92,8 +92,8 @@ class AnonDaemon():
         return self.governance_info
 
     # governance info convenience methods
-    # def superblockcycle(self):
-    #     return self.govinfo['superblockcycle']
+    def superblockcycle(self):
+        return self.govinfo['superblockcycle']
 
     def governanceminquorum(self):
         return self.govinfo['governanceminquorum']
@@ -101,13 +101,13 @@ class AnonDaemon():
     def proposalfee(self):
         return self.govinfo['proposalfee']
 
-    # def last_superblock_height(self):
-    #     height = self.rpc_command('getblockcount')
-    #     cycle = self.superblockcycle()
-    #     return cycle * (height // cycle)
+    def last_superblock_height(self):
+        height = self.rpc_command('getblockcount')
+        cycle = self.superblockcycle()
+        return cycle * (height // cycle)
 
-    # def next_superblock_height(self):
-        # return self.last_superblock_height() + self.superblockcycle()
+    def next_superblock_height(self):
+        return self.last_superblock_height() + self.superblockcycle()
 
     def is_masternode(self):
         return not (self.get_current_masternode_vin() is None)
@@ -131,19 +131,19 @@ class AnonDaemon():
             height = self.rpc_command('getblockcount')
         return Decimal(self.rpc_command('getsuperblockbudget', height))
 
-    # def next_superblock_max_budget(self):
-    #     cycle = self.superblockcycle()
-    #     current_block_height = self.rpc_command('getblockcount')
+    def next_superblock_max_budget(self):
+        cycle = self.superblockcycle()
+        current_block_height = self.rpc_command('getblockcount')
 
-    #     last_superblock_height = (current_block_height // cycle) * cycle
-    #     next_superblock_height = last_superblock_height + cycle
+        last_superblock_height = (current_block_height // cycle) * cycle
+        next_superblock_height = last_superblock_height + cycle
 
-    #     last_allocation = self.get_superblock_budget_allocation(last_superblock_height)
-    #     next_allocation = self.get_superblock_budget_allocation(next_superblock_height)
+        last_allocation = self.get_superblock_budget_allocation(last_superblock_height)
+        next_allocation = self.get_superblock_budget_allocation(next_superblock_height)
 
-    #     next_superblock_max_budget = next_allocation
+        next_superblock_max_budget = next_allocation
 
-    #     return next_superblock_max_budget
+        return next_superblock_max_budget
 
     # "my" votes refers to the current running masternode
     # memoized on a per-run, per-object_hash basis
@@ -166,9 +166,9 @@ class AnonDaemon():
 
     def is_govobj_maturity_phase(self):
         # 3-day period for govobj maturity
-        maturity_phase_delta = 1662      # ~(60*24*3)/2.6
+        maturity_phase_delta = 432      # ~(60*24*3)/2.6
         if config.network == 'testnet':
-            maturity_phase_delta = 24    # testnet
+            maturity_phase_delta = 6    # testnet
 
         event_block_height = self.next_superblock_height()
         maturity_phase_start_block = event_block_height - maturity_phase_delta
