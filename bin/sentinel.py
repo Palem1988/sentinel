@@ -7,7 +7,7 @@ import config
 import misc
 # from anond import anondaemon
 from anond import AnonDaemon
-# from models import Superblock, Proposal, GovernanceObject, Watchdog
+from models import Superblock, Proposal, GovernanceObject, Watchdog
 from models import Proposal, GovernanceObject, Watchdog
 from models import VoteSignals, VoteOutcomes, Transient
 import socket
@@ -79,71 +79,71 @@ def sentinel_ping(anond):
     printdbg("leaving sentinel_ping")
 
 
-# def attempt_superblock_creation(anond):
-#     import dashlib
+def attempt_superblock_creation(anond):
+    import anonlib
 
-#     if not anond.is_masternode():
-#         print("We are not a Masternode... can't submit superblocks!")
-#         return
+    if not anond.is_masternode():
+        print("We are not a Masternode... can't submit superblocks!")
+        return
 
-#     # query votes for this specific ebh... if we have voted for this specific
-#     # ebh, then it's voted on. since we track votes this is all done using joins
-#     # against the votes table
-#     #
-#     # has this masternode voted on *any* superblocks at the given event_block_height?
-#     # have we voted FUNDING=YES for a superblock for this specific event_block_height?
+    # query votes for this specific ebh... if we have voted for this specific
+    # ebh, then it's voted on. since we track votes this is all done using joins
+    # against the votes table
+    #
+    # has this masternode voted on *any* superblocks at the given event_block_height?
+    # have we voted FUNDING=YES for a superblock for this specific event_block_height?
 
-#     event_block_height = anond.next_superblock_height()
+    event_block_height = anond.next_superblock_height()
 
-#     if Superblock.is_voted_funding(event_block_height):
-#         # printdbg("ALREADY VOTED! 'til next time!")
+    if Superblock.is_voted_funding(event_block_height):
+        printdbg("ALREADY VOTED! 'til next time!")
 
-#         # vote down any new SBs because we've already chosen a winner
-#         for sb in Superblock.at_height(event_block_height):
-#             if not sb.voted_on(signal=VoteSignals.funding):
-#                 sb.vote(anond, VoteSignals.funding, VoteOutcomes.no)
+        # vote down any new SBs because we've already chosen a winner
+        for sb in Superblock.at_height(event_block_height):
+            if not sb.voted_on(signal=VoteSignals.funding):
+                sb.vote(anond, VoteSignals.funding, VoteOutcomes.no)
 
-#         # now return, we're done
-#         return
+        # now return, we're done
+        return
 
-#     if not anond.is_govobj_maturity_phase():
-#         printdbg("Not in maturity phase yet -- will not attempt Superblock")
-#         return
+    if not anond.is_govobj_maturity_phase():
+        printdbg("Not in maturity phase yet -- will not attempt Superblock")
+        return
 
-#     proposals = Proposal.approved_and_ranked(proposal_quorum=anond.governance_quorum(), next_superblock_max_budget=anond.next_superblock_max_budget())
-#     budget_max = anond.get_superblock_budget_allocation(event_block_height)
-#     sb_epoch_time = anond.block_height_to_epoch(event_block_height)
+    proposals = Proposal.approved_and_ranked(proposal_quorum=anond.governance_quorum(), next_superblock_max_budget=anond.next_superblock_max_budget())
+    budget_max = anond.get_superblock_budget_allocation(event_block_height)
+    sb_epoch_time = anond.block_height_to_epoch(event_block_height)
 
-#     sb = dashlib.create_superblock(proposals, event_block_height, budget_max, sb_epoch_time)
-#     if not sb:
-#         printdbg("No superblock created, sorry. Returning.")
-#         return
+    sb = anonlib.create_superblock(proposals, event_block_height, budget_max, sb_epoch_time)
+    if not sb:
+        printdbg("No superblock created, sorry. Returning.")
+        return
 
-#     # find the deterministic SB w/highest object_hash in the DB
-#     dbrec = Superblock.find_highest_deterministic(sb.hex_hash())
-#     if dbrec:
-#         dbrec.vote(anond, VoteSignals.funding, VoteOutcomes.yes)
+    # find the deterministic SB w/highest object_hash in the DB
+    dbrec = Superblock.find_highest_deterministic(sb.hex_hash())
+    if dbrec:
+        dbrec.vote(anond, VoteSignals.funding, VoteOutcomes.yes)
 
-#         # any other blocks which match the sb_hash are duplicates, delete them
-#         for sb in Superblock.select().where(Superblock.sb_hash == sb.hex_hash()):
-#             if not sb.voted_on(signal=VoteSignals.funding):
-#                 sb.vote(anond, VoteSignals.delete, VoteOutcomes.yes)
+        # any other blocks which match the sb_hash are duplicates, delete them
+        for sb in Superblock.select().where(Superblock.sb_hash == sb.hex_hash()):
+            if not sb.voted_on(signal=VoteSignals.funding):
+                sb.vote(anond, VoteSignals.delete, VoteOutcomes.yes)
 
-#         printdbg("VOTED FUNDING FOR SB! We're done here 'til next superblock cycle.")
-#         return
-#     else:
-#         printdbg("The correct superblock wasn't found on the network...")
+        printdbg("VOTED FUNDING FOR SB! We're done here 'til next superblock cycle.")
+        return
+    else:
+        printdbg("The correct superblock wasn't found on the network...")
 
-#     # if we are the elected masternode...
-#     if (anond.we_are_the_winner()):
-#         printdbg("we are the winner! Submit SB to network")
-#         sb.submit(anond)
+    # if we are the elected masternode...
+    if (anond.we_are_the_winner()):
+        printdbg("we are the winner! Submit SB to network")
+        sb.submit(anond)
 
 
 def check_object_validity(anond):
     # vote (in)valid objects
-    # for gov_class in [Proposal, Superblock]:
-    for gov_class in [Proposal]:        
+    for gov_class in [Proposal, Superblock]:
+    # for gov_class in [Proposal]:        
         for obj in gov_class.select():
             obj.vote_validity(anond)
 
@@ -154,8 +154,8 @@ def is_anond_port_open(anond):
     # operators if it's not
     port_open = False
     try:
-        # info = anond.rpc_command('getgovernanceinfo')
-        info = anond.rpc_command('getnetworkinfo')
+        info = anond.rpc_command('getgovernanceinfo')
+        # info = anond.rpc_command('getnetworkinfo')
         port_open = True
     except (socket.error, JSONRPCException) as e:
         print("%s" % e)
@@ -215,28 +215,22 @@ def main():
     # ========================================================================
     #
     # load "gobject list" rpc command data, sync objects into internal database
-    # perform_anond_object_sync(anond)
     perform_anond_object_sync(anond)
 
-    # if anond.has_sentinel_ping:
-    #     sentinel_ping(anond)
     if anond.has_sentinel_ping:
         sentinel_ping(anond)
     else:
         # delete old watchdog objects, create a new if necessary
-        # watchdog_check(anond)
         watchdog_check(anond)
 
     # auto vote network objects as valid/invalid
-    # check_object_validity(anond)
+    check_object_validity(anond)
 
     # vote to delete expired proposals
-    # prune_expired_proposals(anond)
-    # prune_expired_proposals(anond)
+    prune_expired_proposals(anond)
 
     # create a Superblock if necessary
-    # attempt_superblock_creation(anond)
-    # attempt_superblock_creation(anond)
+    attempt_superblock_creation(anond)
 
     # schedule the next run
     Scheduler.schedule_next_run()

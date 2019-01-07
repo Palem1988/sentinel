@@ -99,91 +99,91 @@ def parse_masternode_status_vin(status_vin_string):
     return vin
 
 
-# def create_superblock(proposals, event_block_height, budget_max, sb_epoch_time):
-#     from models import Superblock, GovernanceObject, Proposal
-#     from constants import SUPERBLOCK_FUDGE_WINDOW
+def create_superblock(proposals, event_block_height, budget_max, sb_epoch_time):
+    from models import Superblock, GovernanceObject, Proposal
+    from constants import SUPERBLOCK_FUDGE_WINDOW
 
-#     # don't create an empty superblock
-#     if (len(proposals) == 0):
-#         printdbg("No proposals, cannot create an empty superblock.")
-#         return None
+    # don't create an empty superblock
+    if (len(proposals) == 0):
+        printdbg("No proposals, cannot create an empty superblock.")
+        return None
 
-#     budget_allocated = Decimal(0)
-#     fudge = SUPERBLOCK_FUDGE_WINDOW  # fudge-factor to allow for slighly incorrect estimates
+    budget_allocated = Decimal(0)
+    fudge = SUPERBLOCK_FUDGE_WINDOW  # fudge-factor to allow for slighly incorrect estimates
 
-#     payments = []
-#     for proposal in proposals:
-#         fmt_string = "name: %s, rank: %4d, hash: %s, amount: %s <= %s"
+    payments = []
+    for proposal in proposals:
+        fmt_string = "name: %s, rank: %4d, hash: %s, amount: %s <= %s"
 
-#         # skip proposals that are too expensive...
-#         if (budget_allocated + proposal.payment_amount) > budget_max:
-#             printdbg(
-#                 fmt_string % (
-#                     proposal.name,
-#                     proposal.rank,
-#                     proposal.object_hash,
-#                     proposal.payment_amount,
-#                     "skipped (blows the budget)",
-#                 )
-#             )
-#             continue
+        # skip proposals that are too expensive...
+        if (budget_allocated + proposal.payment_amount) > budget_max:
+            printdbg(
+                fmt_string % (
+                    proposal.name,
+                    proposal.rank,
+                    proposal.object_hash,
+                    proposal.payment_amount,
+                    "skipped (blows the budget)",
+                )
+            )
+            continue
 
-#         # skip proposals if the SB isn't within the Proposal time window...
-#         window_start = proposal.start_epoch - fudge
-#         window_end = proposal.end_epoch + fudge
+        # skip proposals if the SB isn't within the Proposal time window...
+        window_start = proposal.start_epoch - fudge
+        window_end = proposal.end_epoch + fudge
 
-#         printdbg("\twindow_start: %s" % epoch2str(window_start))
-#         printdbg("\twindow_end: %s" % epoch2str(window_end))
-#         printdbg("\tsb_epoch_time: %s" % epoch2str(sb_epoch_time))
+        printdbg("\twindow_start: %s" % epoch2str(window_start))
+        printdbg("\twindow_end: %s" % epoch2str(window_end))
+        printdbg("\tsb_epoch_time: %s" % epoch2str(sb_epoch_time))
 
-#         if (sb_epoch_time < window_start or sb_epoch_time > window_end):
-#             printdbg(
-#                 fmt_string % (
-#                     proposal.name,
-#                     proposal.rank,
-#                     proposal.object_hash,
-#                     proposal.payment_amount,
-#                     "skipped (SB time is outside of Proposal window)",
-#                 )
-#             )
-#             continue
+        if (sb_epoch_time < window_start or sb_epoch_time > window_end):
+            printdbg(
+                fmt_string % (
+                    proposal.name,
+                    proposal.rank,
+                    proposal.object_hash,
+                    proposal.payment_amount,
+                    "skipped (SB time is outside of Proposal window)",
+                )
+            )
+            continue
 
-#         printdbg(
-#             fmt_string % (
-#                 proposal.name,
-#                 proposal.rank,
-#                 proposal.object_hash,
-#                 proposal.payment_amount,
-#                 "adding",
-#             )
-#         )
+        printdbg(
+            fmt_string % (
+                proposal.name,
+                proposal.rank,
+                proposal.object_hash,
+                proposal.payment_amount,
+                "adding",
+            )
+        )
 
-#         # else add proposal and keep track of total budget allocation
-#         budget_allocated += proposal.payment_amount
+        # else add proposal and keep track of total budget allocation
+        budget_allocated += proposal.payment_amount
 
-#         payment = {'address': proposal.payment_address,
-#                    'amount': "{0:.8f}".format(proposal.payment_amount),
-#                    'proposal': "{}".format(proposal.object_hash)}
-#         payments.append(payment)
+        payment = {'address': proposal.payment_address,
+                   'amount': "{0:.8f}".format(proposal.payment_amount),
+                   'proposal': "{}".format(proposal.object_hash)}
+        payments.append(payment)
 
-#     # don't create an empty superblock
-#     if not payments:
-#         printdbg("No proposals made the cut!")
-#         return None
+    # don't create an empty superblock
+    if not payments:
+        printdbg("No proposals made the cut!")
+        return None
 
-#     # 'payments' now contains all the proposals for inclusion in the
-#     # Superblock, but needs to be sorted by proposal hash descending
-#     payments.sort(key=lambda k: k['proposal'], reverse=True)
+    # 'payments' now contains all the proposals for inclusion in the
+    # Superblock, but needs to be sorted by proposal hash descending
+    payments.sort(key=lambda k: k['proposal'], reverse=True)
 
-#     sb = Superblock(
-#         event_block_height=event_block_height,
-#         payment_addresses='|'.join([pd['address'] for pd in payments]),
-#         payment_amounts='|'.join([pd['amount'] for pd in payments]),
-#         proposal_hashes='|'.join([pd['proposal'] for pd in payments]),
-#     )
-#     printdbg("generated superblock: %s" % sb.__dict__)
+    sb = Superblock(
+        event_block_height=event_block_height,
+        payment_addresses='|'.join([pd['address'] for pd in payments]),
+        payment_amounts='|'.join([pd['amount'] for pd in payments]),
+        proposal_hashes='|'.join([pd['proposal'] for pd in payments]),
+    )
+    printdbg("generated superblock: %s" % sb.__dict__)
 
-#     return sb
+    return sb
 
 
 # shims 'til we can fix the dashd side
@@ -198,9 +198,9 @@ def SHIM_serialise_for_anond(sentinel_hex):
     # add 'type' attribute
     obj[1]['type'] = ANOND_GOVOBJ_TYPES[govtype]
 
-    # superblock => "trigger" in dashd
-    # if govtype == 'superblock':
-    #     obj[0] = 'trigger'
+    # superblock => "trigger" in anond
+    if govtype == 'superblock':
+        obj[0] = 'trigger'
 
     # dashd expects an array (even though there is only a 1:1 relationship between govobj->class)
     obj = [obj]
@@ -224,9 +224,9 @@ def SHIM_deserialise_from_anond(anond_hex):
     # extract the govobj type
     govtype = obj[0]
 
-    # superblock => "trigger" in dashd
-    # if govtype == 'trigger':
-    #     obj[0] = govtype = 'superblock'
+    # superblock => "trigger" in anond
+    if govtype == 'trigger':
+        obj[0] = govtype = 'superblock'
 
     # remove redundant 'type' attribute
     if 'type' in obj[1]:
