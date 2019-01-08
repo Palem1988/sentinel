@@ -13,7 +13,6 @@ import time
 
 import config
 
-# def is_valid_dash_address(address, network='mainnet'):
 def is_valid_anon_address(address, network='mainnet'):
     # Only public key addresses are allowed
     # A valid address is a RIPEMD-160 hash which contains 20 bytes
