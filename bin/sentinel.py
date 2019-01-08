@@ -122,6 +122,8 @@ def attempt_superblock_creation(anond):
 
     # find the deterministic SB w/highest object_hash in the DB
     dbrec = Superblock.find_highest_deterministic(sb.hex_hash())
+    printdbg("dbrec:")
+    printdbg(dbrec)
     if dbrec:
         dbrec.vote(anond, VoteSignals.funding, VoteOutcomes.yes)
 
