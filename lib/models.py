@@ -563,7 +563,7 @@ class Superblock(BaseModel, GovernanceClass):
         printdbg("query")
         printdbg(query)
         printdbg("query.limit")
-        printdbg(query.limit(1)[0])
+        # printdbg(query.limit(1)[0])
 
         try:
             obj = query.limit(1)[0]
