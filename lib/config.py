@@ -3,21 +3,18 @@
 """
 import sys
 import os
-# from dash_config import DashConfig
 from anon_config import AnonConfig
 
 default_sentinel_config = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '../sentinel.conf')
 )
 sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config)
-# sentinel_cfg = DashConfig.tokenize(sentinel_config_file)
 sentinel_cfg = AnonConfig.tokenize(sentinel_config_file)
 sentinel_version = "1.1.2"
 # min_dashd_proto_version_with_sentinel_ping = 70207
 min_anond_proto_version_with_sentinel_ping = 200000
 
 
-# def get_dash_conf():
 def get_anon_conf():
     home = os.environ.get('HOME')
 
@@ -25,13 +22,10 @@ def get_anon_conf():
     # TEMPORARY UNTIL WE SWITCH OVER TO ANON PATHS
     anon_conf = os.path.join(home, ".anon/anon.conf")
     if sys.platform == 'darwin':
-        # dash_conf = os.path.join(home, "Library/Application Support/DashCore/dash.conf")
         anon_conf = os.path.join(home, "Library/Application Support/Anon/anon.conf")
 
-    # dash_conf = sentinel_cfg.get('dash_conf', dash_conf)
     anon_conf = sentinel_cfg.get('anon_conf', anon_conf)
 
-    # return dash_conf
     return anon_conf
 
 
@@ -88,7 +82,6 @@ def get_db_conn():
     return db
 
 
-# dash_conf = get_dash_conf()
 anon_conf = get_anon_conf()
 network = get_network()
 db = get_db_conn()

@@ -311,9 +311,9 @@ class Proposal(GovernanceClass, BaseModel):
                 printdbg("\tProposal amount [%s] is negative or zero, returning False" % self.payment_amount)
                 return False
 
-            # payment address is valid base58 dash addr, non-multisig
+            # payment address is valid base58 anon addr, non-multisig
             if not anonlib.is_valid_anon_address(self.payment_address, config.network):
-                printdbg("\tPayment address [%s] not a valid Dash address for network [%s], returning False" % (self.payment_address, config.network))
+                printdbg("\tPayment address [%s] not a valid Anon address for network [%s], returning False" % (self.payment_address, config.network))
                 return False
 
             # URL

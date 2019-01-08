@@ -37,10 +37,9 @@ def is_valid_anon_address(address, network='mainnet'):
         print('anonversion:')
         print(anon_version)
     except:
-        # rescue from exception, not a valid Dash address
+        # rescue from exception, not a valid Anon address
         return False
 
-    # if (address_version != dash_version):
     if (address_version != anon_version):
         return False
 
@@ -285,13 +284,13 @@ def create_superblock(proposals, event_block_height, budget_max, sb_epoch_time):
 #     return sb
 
 
-# shims 'til we can fix the dashd side
+# shims 'til we can fix the anond side
 def SHIM_serialise_for_anond(sentinel_hex):
     from models import ANOND_GOVOBJ_TYPES
     # unpack
     obj = deserialise(sentinel_hex)
 
-    # shim for dashd
+    # shim for anond
     govtype = obj[0]
 
     # add 'type' attribute
@@ -301,7 +300,7 @@ def SHIM_serialise_for_anond(sentinel_hex):
     if govtype == 'superblock':
         obj[0] = 'trigger'
 
-    # dashd expects an array (even though there is only a 1:1 relationship between govobj->class)
+    # anond expects an array (even though there is only a 1:1 relationship between govobj->class)
     obj = [obj]
 
     # re-pack
@@ -309,14 +308,14 @@ def SHIM_serialise_for_anond(sentinel_hex):
     return anond_hex
 
 
-# shims 'til we can fix the dashd side
+# shims 'til we can fix the anond side
 def SHIM_deserialise_from_anond(anond_hex):
     from models import ANOND_GOVOBJ_TYPES
 
     # unpack
     obj = deserialise(anond_hex)
 
-    # shim from dashd
+    # shim from anond
     # only one element in the array...
     obj = obj[0]
 

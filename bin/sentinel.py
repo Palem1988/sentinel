@@ -168,7 +168,6 @@ def is_anond_port_open(anond):
 
 def main():
 
-    # anond = anondaemon.from_dash_conf(config.dash_conf)
     anond = AnonDaemon.from_anon_conf(config.anon_conf)
     options = process_args()
 
