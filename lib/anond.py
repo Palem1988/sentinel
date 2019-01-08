@@ -190,7 +190,7 @@ class AnonDaemon():
         # print "MN election winner: [%s]" % winner
         # print "current masternode VIN: [%s]" % my_vin
 
-        return (winner == my_vin)
+        return (winner[:10] == my_vin)
 
     @property
     def MASTERNODE_WATCHDOG_MAX_SECONDS(self):
