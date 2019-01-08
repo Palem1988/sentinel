@@ -80,6 +80,7 @@ def sentinel_ping(anond):
 
 
 def attempt_superblock_creation(anond):
+    printdbg("Inside attempt_superblock_creation")
     import anonlib
 
     if not anond.is_masternode():
@@ -224,14 +225,18 @@ def main():
         watchdog_check(anond)
 
     # auto vote network objects as valid/invalid
+    printdbg("Before check_object_validity")
     check_object_validity(anond)
 
+    printdbg("Before prune_expired_proposals")
     # vote to delete expired proposals
     prune_expired_proposals(anond)
 
+    printdbg("Before attempt_superblock_creation")
     # create a Superblock if necessary
     attempt_superblock_creation(anond)
 
+    printdbg("Before schedule_next_run")
     # schedule the next run
     Scheduler.schedule_next_run()
 
