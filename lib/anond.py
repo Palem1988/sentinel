@@ -188,7 +188,7 @@ class AnonDaemon():
         current_block_hash = self.current_block_hash()
         mn_list = self.get_masternodes()
         winner = anonlib.elect_mn(block_hash=current_block_hash, mnlist=mn_list)
-        winner = winner[:10] + winner[2:]
+        winner = winner[:10] + winner[-2:]
         my_vin = self.get_current_masternode_vin()
 
         printdbg("current_block_hash: [%s]" % current_block_hash)
