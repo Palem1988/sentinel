@@ -552,9 +552,17 @@ class Superblock(BaseModel, GovernanceClass):
     @classmethod
     def find_highest_deterministic(self, sb_hash):
         # highest block hash wins
+        printdbg("self:")
+        printdbg(self)
+        printdbg("sb_hash")
+        printdbg(sb_hash)
+
         query = (self.select()
                  .where(self.sb_hash == sb_hash)
                  .order_by(self.object_hash.desc()))
+        printdbg("query")
+        printdbg(query)
+        
         try:
             obj = query.limit(1)[0]
         except IndexError as e:
