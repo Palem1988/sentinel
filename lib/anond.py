@@ -12,6 +12,9 @@ from masternode import Masternode
 from decimal import Decimal
 import time
 
+from misc import printdbg
+
+
 
 # class AnonDaemon():
 class AnonDaemon():
@@ -180,15 +183,16 @@ class AnonDaemon():
 
     def we_are_the_winner(self):
         import anonlib
+        printdbg("What's going on??")
         # find the elected MN vin for superblock creation...
         current_block_hash = self.current_block_hash()
         mn_list = self.get_masternodes()
         winner = anonlib.elect_mn(block_hash=current_block_hash, mnlist=mn_list)
         my_vin = self.get_current_masternode_vin()
 
-        # print "current_block_hash: [%s]" % current_block_hash
-        # print "MN election winner: [%s]" % winner
-        # print "current masternode VIN: [%s]" % my_vin
+        printdbg("current_block_hash: [%s]" % current_block_hash)
+        printdbg("MN election winner: [%s]" % winner)
+        printdbg("current masternode VIN: [%s]" % my_vin)
 
         return (winner == my_vin)
 
