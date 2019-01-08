@@ -62,10 +62,10 @@ def watchdog_check(anond):
     printdbg("leaving watchdog_check")
 
 
-# def prune_expired_proposals(anond):
-#     # vote delete for old proposals
-#     for proposal in Proposal.expired(anond.superblockcycle()):
-#         proposal.vote(anond, VoteSignals.delete, VoteOutcomes.yes)
+def prune_expired_proposals(anond):
+    # vote delete for old proposals
+    for proposal in Proposal.expired(anond.superblockcycle()):
+        proposal.vote(anond, VoteSignals.delete, VoteOutcomes.yes)
 
 
 # ping anond
