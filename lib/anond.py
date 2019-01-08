@@ -188,14 +188,15 @@ class AnonDaemon():
         current_block_hash = self.current_block_hash()
         mn_list = self.get_masternodes()
         winner = anonlib.elect_mn(block_hash=current_block_hash, mnlist=mn_list)
+        winner = winner[:10] + winner[2:]
         my_vin = self.get_current_masternode_vin()
 
         printdbg("current_block_hash: [%s]" % current_block_hash)
-        printdbg("MN election winner: [%s]" % winner[:10])
+        printdbg("MN election winner: [%s]" % winner)
         printdbg("current masternode VIN: [%s]" % my_vin)
-        printdbg("result [%d]" % (winner[:10] == my_vin))
+        printdbg("result [%d]" % (winner == my_vin))
 
-        return (winner[:10] == my_vin)
+        return (winner == my_vin)
 
     @property
     def MASTERNODE_WATCHDOG_MAX_SECONDS(self):
