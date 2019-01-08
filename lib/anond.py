@@ -191,8 +191,9 @@ class AnonDaemon():
         my_vin = self.get_current_masternode_vin()
 
         printdbg("current_block_hash: [%s]" % current_block_hash)
-        printdbg("MN election winner: [%s]" % winner)
+        printdbg("MN election winner: [%s]" % winner[:10])
         printdbg("current masternode VIN: [%s]" % my_vin)
+        printdbg("result [%d]" % (winner[:10] == my_vin))
 
         return (winner[:10] == my_vin)
 
