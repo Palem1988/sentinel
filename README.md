@@ -115,4 +115,4 @@ SENTINEL_DEBUG=1 ./venv/bin/python bin/sentinel.py
 
 Released under the MIT license, under the same terms as ANONCore itself. See [LICENSE](LICENSE) for more info.
 
-### Credits to Dash Core
+### Credits to Anon Core

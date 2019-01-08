@@ -1,5 +1,5 @@
 """
-dashd JSONRPC interface
+anond JSONRPC interface
 """
 import sys
 import os
@@ -13,7 +13,7 @@ from decimal import Decimal
 import time
 
 
-# class DashDaemon():
+# class AnonDaemon():
 class AnonDaemon():
     def __init__(self, **kwargs):
         host = kwargs.get('host', '127.0.0.1')
@@ -23,7 +23,7 @@ class AnonDaemon():
 
         self.creds = (user, password, host, port)
 
-        # memoize calls to some dashd methods
+        # memoize calls to some anond methods
         self.governance_info = None
         self.gobject_votes = {}
 
@@ -32,11 +32,7 @@ class AnonDaemon():
         return AuthServiceProxy("http://{0}:{1}@{2}:{3}".format(*self.creds))
 
     @classmethod
-    # def from_dash_conf(self, dash_dot_conf):
     def from_anon_conf(self, anon_dot_conf):
-        # from dash_config import DashConfig
-        # config_text = DashConfig.slurp_config_file(dash_dot_conf)
-        # creds = DashConfig.get_rpc_creds(config_text, config.network)
         from anon_config import AnonConfig
         config_text = AnonConfig.slurp_config_file(anon_dot_conf)
         creds = AnonConfig.get_rpc_creds(config_text, config.network)
@@ -62,7 +58,6 @@ class AnonDaemon():
         return golist
 
     def get_current_masternode_vin(self):
-        # from dashlib import parse_masternode_status_vin
         from anonlib import parse_masternode_status_vin
 
         my_vin = None
@@ -184,7 +179,6 @@ class AnonDaemon():
         return (current_height >= maturity_phase_start_block)
 
     def we_are_the_winner(self):
-        # import dashlib
         import anonlib
         # find the elected MN vin for superblock creation...
         current_block_hash = self.current_block_hash()
@@ -208,7 +202,7 @@ class AnonDaemon():
         return (self.MASTERNODE_WATCHDOG_MAX_SECONDS // 2)
 
     def estimate_block_time(self, height):
-        # import dashlib
+        # import anonlib
         import anonlib
         """
         Called by block_height_to_epoch if block height is in the future.
@@ -222,7 +216,6 @@ class AnonDaemon():
         if (diff < 0):
             raise Exception("Oh Noes.")
 
-        # future_seconds = dashlib.blocks_to_seconds(diff)
         future_seconds = anonlib.blocks_to_seconds(diff)
         estimated_epoch = int(time.time() + future_seconds)
 
