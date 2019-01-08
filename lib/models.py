@@ -562,7 +562,9 @@ class Superblock(BaseModel, GovernanceClass):
                  .order_by(self.object_hash.desc()))
         printdbg("query")
         printdbg(query)
-        
+        printdbg("query.limit")
+        printdbg(query.limit(1)[0])
+
         try:
             obj = query.limit(1)[0]
         except IndexError as e:
