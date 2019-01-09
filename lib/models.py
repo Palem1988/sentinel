@@ -367,7 +367,8 @@ class Proposal(GovernanceClass, BaseModel):
 
     def is_deletable(self):
         # end_date < (current_date - 30 days)
-        thirty_days = (86400 * 30)
+        # thirty_days = (86400 * 30)
+        thirty_days = 600
         if (self.end_epoch < (misc.now() - thirty_days)):
             return True
 
