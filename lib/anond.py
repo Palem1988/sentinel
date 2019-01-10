@@ -161,7 +161,7 @@ class AnonDaemon():
 
     def is_govobj_maturity_phase(self):
         # 3-day period for govobj maturity
-        maturity_phase_delta = 432      # ~(60*24*3)/2.6
+        maturity_phase_delta = 432      # ~(60*24*3)/10
         if config.network == 'testnet':
             maturity_phase_delta = 6    # testnet
 
