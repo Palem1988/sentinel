@@ -77,7 +77,7 @@ class AnonDaemon():
         min_quorum = self.govinfo['governanceminquorum']
 
         # the minimum quorum is calculated based on the number of masternodes
-        quorum = max(min_quorum, (total_masternodes // 10))
+        quorum = max(min_quorum, (total_masternodes // 4))
         return quorum
 
     @property
