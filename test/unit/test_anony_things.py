@@ -147,5 +147,5 @@ def test_blocks_to_seconds():
     # assert int(dashlib.blocks_to_seconds(16616)) == 2612035
     assert Decimal(anonlib.blocks_to_seconds(0)) == Decimal(0.0)
     assert Decimal(anonlib.blocks_to_seconds(2)).quantize(precision) \
-        == Decimal(314.4).quantize(precision)
-    assert int(anonlib.blocks_to_seconds(16616)) == 2612035
+        == Decimal(1200).quantize(precision)
+    assert int(anonlib.blocks_to_seconds(16616)) == 9969600
