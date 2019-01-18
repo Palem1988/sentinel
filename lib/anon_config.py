@@ -34,7 +34,7 @@ class AnonConfig():
         creds = {key: value for (key, value) in match}
 
         # standard Anon defaults...
-        default_port = 3130 if (network == 'mainnet') else 43234
+        default_port = 3130 if (network == 'mainnet') else 33129
 
         # use default port for network if not specified in anon.conf
         if not ('port' in creds):

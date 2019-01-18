@@ -67,8 +67,7 @@ def test_get_rpc_creds():
         assert key in creds
     assert creds.get('user') == 'anonrpc'
     assert creds.get('password') == 'EwJeV3fZTyTVozdECF627BkBMnNDwQaVLakG3A4wXYyk'
-    assert creds.get('port') == 43234
-    # assert creds.get('port') == 33129
+    assert creds.get('port') == 33129
 
 
 # ensure anon network (mainnet, testnet) matches that specified in config
