@@ -7,11 +7,15 @@ from models import Transient
 from misc import printdbg
 import time
 import random
+import config
 
 
 class Scheduler(object):
     transient_key_scheduled = 'NEXT_SENTINEL_CHECK_AT'
-    random_interval_max = 1800
+    if config.network == 'testnet':
+        random_interval_max = 120
+    else:  
+        random_interval_max = 1800
 
     @classmethod
     def is_run_time(self):
